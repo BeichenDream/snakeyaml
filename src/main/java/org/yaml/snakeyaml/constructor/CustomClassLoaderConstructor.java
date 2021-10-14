@@ -15,6 +15,8 @@
  */
 package org.yaml.snakeyaml.constructor;
 
+import org.yaml.snakeyaml.SecClass;
+
 /**
  * Construct instances with a custom Class Loader.
  */
@@ -35,6 +37,6 @@ public class CustomClassLoaderConstructor extends Constructor {
 
     @Override
     protected Class<?> getClassForName(String name) throws ClassNotFoundException {
-        return Class.forName(name, true, loader);
+        return SecClass.forName(name, true, loader);
     }
 }

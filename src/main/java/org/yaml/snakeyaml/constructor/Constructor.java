@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.SecClass;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.Property;
@@ -118,11 +119,11 @@ public class Constructor extends SafeConstructor {
      * @throws ClassNotFoundException if cannot be loaded by the classloader
      */
     public Constructor(String theRoot) throws ClassNotFoundException {
-        this(Class.forName(check(theRoot)));
+        this(SecClass.forName(check(theRoot)));
     }
 
     public Constructor(String theRoot, LoaderOptions loadingConfig) throws ClassNotFoundException {
-        this(Class.forName(check(theRoot)), loadingConfig);
+        this(SecClass.forName(check(theRoot)), loadingConfig);
     }
 
     private static final String check(String s) {
@@ -677,9 +678,9 @@ public class Constructor extends SafeConstructor {
 
     protected Class<?> getClassForName(String name) throws ClassNotFoundException {
         try {
-            return Class.forName(name, true, Thread.currentThread().getContextClassLoader());
+            return SecClass.forName(name, true, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
-            return Class.forName(name);
+            return SecClass.forName(name);
         }
     }
 }

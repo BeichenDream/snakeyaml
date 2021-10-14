@@ -17,6 +17,7 @@ package org.yaml.snakeyaml.constructor;
 
 import junit.framework.TestCase;
 
+import org.yaml.snakeyaml.SecClass;
 import org.yaml.snakeyaml.Yaml;
 
 public class CustomClassLoaderConstructorTest extends TestCase {
@@ -39,7 +40,7 @@ public class CustomClassLoaderConstructorTest extends TestCase {
     }
 
     public void testGetClassForNameWithRoot() throws ClassNotFoundException {
-        Class<?> clazz = Class.forName(
+        Class<?> clazz = SecClass.forName(
                 "org.yaml.snakeyaml.constructor.CustomClassLoaderConstructorTest$LoaderBean", true,
                 CustomClassLoaderConstructorTest.class.getClassLoader());
         CustomClassLoaderConstructor constr = new CustomClassLoaderConstructor(clazz,

@@ -20,6 +20,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.yaml.snakeyaml.SecClass;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.AbstractConstruct;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -76,7 +77,7 @@ public class ParameterizedTypeTest extends TestCase {
             public Object construct(Node node) {
                 String clazz = (String) constructScalar((ScalarNode) node);
                 try {
-                    return Class.forName("java.lang." + clazz);
+                    return SecClass.forName("java.lang." + clazz);
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.yaml.snakeyaml.SecClass;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.util.UriEncoder;
 
@@ -65,8 +66,8 @@ public final class Tag {
 
         // java.sql is a separate module since jigsaw was introduced in java9
         try {
-            timestampSet.add(Class.forName("java.sql.Date"));
-            timestampSet.add(Class.forName("java.sql.Timestamp"));
+            timestampSet.add(SecClass.forName("java.sql.Date"));
+            timestampSet.add(SecClass.forName("java.sql.Timestamp"));
         } catch (ClassNotFoundException ignored) {
             // ignore - we are running in a module path without java.sql
         }
