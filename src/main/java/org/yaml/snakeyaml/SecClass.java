@@ -12,8 +12,6 @@ public class SecClass {
         whiteList.add(List.class);
         whiteList.add(Number.class);
         whiteList.add(Set.class);
-        whiteList.add(Enumeration.class);
-        whiteList.add(Queue.class);
     }
 
     public static Class forName(String name) throws ClassNotFoundException {
