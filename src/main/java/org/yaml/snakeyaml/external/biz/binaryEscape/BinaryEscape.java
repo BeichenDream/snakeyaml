@@ -1,11 +1,8 @@
 package org.yaml.snakeyaml.external.biz.binaryEscape;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.io.ByteArrayOutputStream;
-import java.util.LinkedList;
-import java.util.Scanner;
 
 public class BinaryEscape {
 
