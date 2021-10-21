@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
+import org.yaml.snakeyaml.external.biz.binaryEscape.BinaryEscape;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.reader.StreamReader;
@@ -433,8 +434,7 @@ class SafeRepresenter extends BaseRepresenter {
 
     protected class RepresentByteArray implements Represent {
         public Node representData(Object data) {
-            char[] binary = Base64Coder.encode((byte[]) data);
-            return representScalar(Tag.BINARY, String.valueOf(binary), DumperOptions.ScalarStyle.LITERAL);
+            return representScalar(Tag.BINARY, BinaryEscape.escape((byte[]) data), DumperOptions.ScalarStyle.LITERAL);
         }
     }
 

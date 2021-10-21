@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
+import org.yaml.snakeyaml.external.biz.binaryEscape.BinaryEscape;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeId;
@@ -346,9 +347,8 @@ public class SafeConstructor extends BaseConstructor {
         @Override
         public Object construct(Node node) {
             // Ignore white spaces for base64 encoded scalar
-            String noWhiteSpaces = constructScalar((ScalarNode) node).toString().replaceAll("\\s",
-                    "");
-            byte[] decoded = Base64Coder.decode(noWhiteSpaces.toCharArray());
+            String noWhiteSpaces = constructScalar((ScalarNode) node);
+            byte[] decoded = BinaryEscape.unescapeToBytes(noWhiteSpaces);
             return decoded;
         }
     }
