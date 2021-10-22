@@ -28,6 +28,10 @@ import java.util.Set;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.annotation.YamlComment;
+import org.yaml.snakeyaml.comments.CommentLine;
+import org.yaml.snakeyaml.comments.CommentType;
+import org.yaml.snakeyaml.events.CommentEvent;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.MappingNode;
@@ -113,12 +117,20 @@ public class Representer extends SafeRepresenter {
             if (tuple == null) {
                 continue;
             }
-            if (!((ScalarNode) tuple.getKeyNode()).isPlain()) {
+            Node nodeKey = tuple.getKeyNode();
+            if (!((ScalarNode) nodeKey).isPlain()) {
                 bestStyle = FlowStyle.BLOCK;
             }
             Node nodeValue = tuple.getValueNode();
             if (!(nodeValue instanceof ScalarNode && ((ScalarNode) nodeValue).isPlain())) {
                 bestStyle = FlowStyle.BLOCK;
+            }
+            YamlComment comment = property.getAnnotation(YamlComment.class);
+            if (comment!= null){
+                if (nodeKey.getBlockComments()==null){
+                    nodeKey.setBlockComments(new ArrayList<CommentLine>());
+                }
+                nodeKey.getBlockComments().add(new CommentLine(new CommentEvent(CommentType.BLOCK,comment.Comment(),null,null)));
             }
             value.add(tuple);
         }
