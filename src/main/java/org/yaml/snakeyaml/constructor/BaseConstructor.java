@@ -84,6 +84,7 @@ public abstract class BaseConstructor {
     private boolean enumCaseSensitive = false;
 
     protected final Map<Class<? extends Object>, TypeDescription> typeDefinitions;
+    protected final Map<Class<? extends Object>, Construct> typeRedefinition;
     protected final Map<Tag, Class<? extends Object>> typeTags;
 
     protected LoaderOptions loadingConfig;
@@ -98,6 +99,7 @@ public abstract class BaseConstructor {
         maps2fill = new ArrayList<RecursiveTuple<Map<Object, Object>, RecursiveTuple<Object, Object>>>();
         sets2fill = new ArrayList<RecursiveTuple<Set<Object>, Object>>();
         typeDefinitions = new HashMap<Class<? extends Object>, TypeDescription>();
+        typeRedefinition = new HashMap<>();
         typeTags = new HashMap<Tag, Class<? extends Object>>();
 
         rootTag = null;
@@ -107,6 +109,7 @@ public abstract class BaseConstructor {
                 TreeMap.class));
         typeDefinitions.put(SortedSet.class, new TypeDescription(SortedSet.class, Tag.SET,
                 TreeSet.class));
+        typeRedefinition.put(byte[].class,new SafeConstructor.ConstructYamlBinary());
         this.loadingConfig = loadingConfig;
     }
 
@@ -264,7 +267,7 @@ public abstract class BaseConstructor {
         }
     }
 
-    protected String constructScalar(ScalarNode node) {
+    protected static String constructScalar(ScalarNode node) {
         return node.getValue();
     }
 
@@ -319,6 +322,11 @@ public abstract class BaseConstructor {
                 return instance;
             }
         }
+
+        if (typeRedefinition.containsKey(type)){
+            return typeRedefinition.get(type).construct(node);
+        }
+
         if (tryDefault) {
             /*
              * Removed <code> have InstantiationException in case of abstract

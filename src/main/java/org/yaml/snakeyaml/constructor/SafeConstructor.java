@@ -343,7 +343,7 @@ public class SafeConstructor extends BaseConstructor {
         }
     }
 
-    public class ConstructYamlBinary extends AbstractConstruct {
+    public static class ConstructYamlBinary extends AbstractConstruct {
         @Override
         public Object construct(Node node) {
             // Ignore white spaces for base64 encoded scalar
