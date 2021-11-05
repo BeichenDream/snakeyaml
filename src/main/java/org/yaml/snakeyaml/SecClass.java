@@ -7,7 +7,6 @@ import java.util.*;
 public class SecClass {
     public static final ArrayList<Class> whiteList = new ArrayList();
     static {
-        whiteList.add(CharSequence.class);
         whiteList.add(Map.class);
         whiteList.add(List.class);
         whiteList.add(Number.class);
@@ -28,7 +27,7 @@ public class SecClass {
                         Iterator<Class> classIterator = whiteList.iterator();
                         while (classIterator.hasNext()){
                             Class whiteClass = classIterator.next();
-                            if (whiteClass.isAssignableFrom(type)){
+                            if (whiteClass.getClassLoader() == null && whiteClass.isAssignableFrom(type)){
                                 ok = true;
                                 break;
                             }
