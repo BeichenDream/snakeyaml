@@ -22,20 +22,15 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.util.PlatformFeatureDetector;
 
 public class PropertyUtils {
 
-    private final Map<Class<?>, Map<String, Property>> propertiesCache = new HashMap<Class<?>, Map<String, Property>>();
-    private final Map<Class<?>, Set<Property>> readableProperties = new HashMap<Class<?>, Set<Property>>();
+    private final Map<Class<?>, Map<String, Property>> propertiesCache = new LinkedHashMap<Class<?>, Map<String, Property>>();
+    private final Map<Class<?>, Set<Property>> readableProperties = new LinkedHashMap<Class<?>, Set<Property>>();
     private BeanAccess beanAccess = BeanAccess.DEFAULT;
     private boolean allowReadOnlyProperties = false;
     private boolean skipMissingProperties = false;
@@ -134,7 +129,7 @@ public class PropertyUtils {
     }
 
     protected Set<Property> createPropertySet(Class<? extends Object> type, BeanAccess bAccess) {
-        Set<Property> properties = new TreeSet<Property>();
+        Set<Property> properties = new LinkedHashSet<Property>();
         Collection<Property> props = getPropertiesMap(type, bAccess).values();
         for (Property property : props) {
             if (property.isReadable() && (allowReadOnlyProperties || property.isWritable())) {
