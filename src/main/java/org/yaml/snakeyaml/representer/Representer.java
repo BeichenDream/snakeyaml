@@ -15,6 +15,8 @@
  */
 package org.yaml.snakeyaml.representer;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,6 +48,18 @@ import org.yaml.snakeyaml.nodes.Tag;
  * Represent JavaBeans
  */
 public class Representer extends SafeRepresenter {
+
+    protected static MethodHandle getI18nStringMethodHandle;
+
+    static {
+        try {
+            getI18nStringMethodHandle = MethodHandles.lookup().unreflect(Class.forName("core.EasyI18N").getMethod("getI18nString",String.class));
+        }catch (Exception e){
+            //e.printStackTrace();
+        }
+
+    }
+
 
     protected Map<Class<? extends Object>, TypeDescription> typeDefinitions = Collections
             .emptyMap();
@@ -130,7 +144,19 @@ public class Representer extends SafeRepresenter {
                 if (nodeKey.getBlockComments()==null){
                     nodeKey.setBlockComments(new ArrayList<CommentLine>());
                 }
-                nodeKey.getBlockComments().add(new CommentLine(new CommentEvent(CommentType.BLOCK,comment.Comment(),null,null)));
+                String commentStr = comment.Comment();
+                if (getI18nStringMethodHandle != null){
+                    try {
+                        commentStr = (String) getI18nStringMethodHandle.invoke(commentStr);
+                    } catch (Throwable throwable) {
+                        //throwable.printStackTrace();
+                    }
+                }
+                String[] blocks = commentStr.split("\n");
+                for (int i = 0; i < blocks.length; i++) {
+                    String block = blocks[i];
+                    nodeKey.getBlockComments().add(new CommentLine(new CommentEvent(CommentType.BLOCK,block,null,null)));
+                }
             }
             value.add(tuple);
         }
